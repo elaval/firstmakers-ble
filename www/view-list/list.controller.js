@@ -1,5 +1,5 @@
 /* global ble */
-angular.module('starter.controllers', [])
+angular.module('ble101')
 
 .controller('BLECtrl', function($scope, BLE) {
   var myself = this;

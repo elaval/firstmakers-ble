@@ -1,4 +1,4 @@
-<ion-view view-title="BLE">
+<ion-view view-title="Active devices">
   <ion-content>
     <ion-refresher
        pulling-text="Pull to refresh..."
@@ -6,7 +6,7 @@
     </ion-refresher>
     <ion-list>
       <ion-item class="item-icon-right" ng-repeat="device in controller.devices" type="item-text-wrap" href="#/ble101-detail/{{device.id}}">
-        <h2>{{device.name}}</h2>
+        <h2>{{device.name}} - {{device.advertising.kCBAdvDataLocalName}}</h2>
         <p>{{device.id}} &nbsp; RSSI: {{device.rssi}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>

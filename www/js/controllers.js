@@ -1,5 +1,5 @@
 /* global ble */
-angular.module('starter.controllers', [])
+angular.module('ble101')
 
 .controller('DashCtrl', function($scope) {})
 

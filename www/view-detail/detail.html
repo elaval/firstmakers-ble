@@ -1,24 +1,34 @@
-<ion-view view-title="{{device.name}}">
-{{controller.device.name}} - {{controller.advertising.kCBAdvDataLocalName}}
-  <ion-content class="padding">
-    
+
+
+
+<ion-view >
+  <ion-nav-title>
+    {{controller.device.name}} - {{controller.device.advertising.kCBAdvDataLocalName}}
+  </ion-nav-title>
+  <ion-content>
     <ion-list>
       
-      <div ng-repeat="characteristic in controller.device.characteristics"> 
-        <ion-item ng-show="!controller.isDigital(characteristic)">
+      <ion-item class="item-divider">
+          Analog Ports
+      </ion-item>
+      <ion-item ng-repeat="characteristic in controller.analogPins">
             {{characteristic.characteristic}}: {{characteristic.value}}
-        </ion-item>
-        <ion-toggle ng-show="controller.isDigital(characteristic)"
-                    ng-model="controller.value[characteristic.characteristic]" 
-                    ng-checked="controller.value[characteristic.characteristic]"
-                    ng-change="controller.changeSwitch(controller.device.id, characteristic.service, characteristic.characteristic )">
-          {{ characteristic.characteristic }}
-        </ion-toggle>
-      </div>
-      
+      </ion-item>
 
+      <ion-item class="item-divider">
+          Digital Ports
+      </ion-item>
+      
+      <ion-toggle ng-repeat="characteristic in controller.digitalPins"
+                  ng-show="controller.isDigital(characteristic)"
+                  ng-model="controller.value[characteristic.characteristic]" 
+                  ng-checked="controller.value[characteristic.characteristic]"
+                  ng-change="controller.changeSwitch(controller.device.id, characteristic.service, characteristic.characteristic )">
+        {{ characteristic.characteristic }}
+      </ion-toggle>
     </ion-list>
       
+      <!--
     
     <div class="list card" ng-repeat="characteristic in controller.device.characteristics" >
       <div class="item item-divider">{{characteristic.characteristic}}</div>
@@ -43,7 +53,7 @@
         </label>
       </div>
       
-      
+      -->
     </div>
         
     

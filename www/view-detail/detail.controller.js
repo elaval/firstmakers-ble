@@ -1,23 +1,40 @@
 /* global ble */
-angular.module('starter.controllers', [])
+angular.module('ble101')
 
 .controller('BLEDetailCtrl', function($scope, $stateParams, BLE) {
   var myself = this;
-  $scope.switch = {value: false};
   
-  myself.value = {};
+  
+  myself.value = {}; // Values for each digital pin
+  myself.analogPins = [];
+  myself.digitalPins = [];
 
-
+  
   BLE.connect($stateParams.deviceId).then(
       function(peripheral) {
           myself.device = peripheral;
-
           myself.device_id = peripheral.id;
           
-          //var d = peripheral.characteristics[0];
+          /**
+           * device.
+           * name
+           * id
+           * rssi
+           * advertising.kCBAdvDataIsConnectable
+           * advertising.kCBAdvDataLocalName
+           * advertising.kCBAdvDataServiceUUIDs
+           */
           
-
+ 
           _.each(peripheral.characteristics, function(d) {
+            
+            var pinType = d.characteristic.substring(0,2);
+            if (pinType=="AA") {
+              myself.analogPins.push(d);
+            } else if (pinType=="DD") {
+              myself.digitalPins.push(d);
+            }
+            
             console.log(d.characteristic, d.service);
 
  
