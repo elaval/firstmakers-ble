@@ -50,6 +50,8 @@ angular.module('starter.controllers', [])
 .controller('BLEDetailCtrl', function($scope, $stateParams, BLE) {
   var myself = this;
   $scope.switch = {value: false};
+  
+  myself.value = {};
 
 
   BLE.connect($stateParams.deviceId).then(
@@ -98,31 +100,24 @@ angular.module('starter.controllers', [])
                 function(err) {
                   console.log(err);
                 })  
-            
-
-
-            
-
           });
-
-
-          
-
       }
   );
 
 
+  myself.isDigital = function(item) {
+    return item.characteristic.indexOf("DD") > -1;
+  }
 
 
   myself.changeSwitch = function(device_id, service_uuid, characteristic_uuid) {
     var data = new Uint8Array(1);
 
-
-    data[0] = myself.switch.value ? 1 : 0;
+    data[0] = myself.value[characteristic_uuid] ? 1 : 0;
 
     BLE.write(device_id, service_uuid, characteristic_uuid, data.buffer)
     .then(function() {
-      console.log("Written ", myself.switch.value);
+      console.log("Written ", myself.value[characteristic_uuid]);
     })
   }
 })

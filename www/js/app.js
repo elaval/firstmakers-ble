@@ -40,75 +40,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
   $stateProvider
-
+  
   // setup an abstract state for the tabs directive
-    .state('tab', {
-    url: "/tab",
-    abstract: true,
-    templateUrl: "templates/tabs.html"
+  .state('ble101', {
+    url: "/ble101",
+    templateUrl: "view-list/list.html",
+    controller: 'BLECtrl as controller'
   })
-
-  // Each tab has its own nav history stack:
-
-  .state('tab.dash', {
-    url: '/dash',
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
-      }
-    }
-  })
-
-  .state('tab.chats', {
-      url: '/chats',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
-        }
-      }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
-      }
-    })
-
-    .state('tab.ble', {
-      url: '/ble',
-      views: {
-        'tab-ble': {
-          templateUrl: 'templates/tab-ble.html',
-          controller: 'BLECtrl as controller',
-        }
-      }
-    })
-    .state('tab.ble-detail', {
-      url: '/ble/:deviceId',
-      views: {
-        'tab-ble': {
-          templateUrl: 'templates/ble-detail.html',
-          controller: 'BLEDetailCtrl as controller'
-        }
-      }
-  })
-
-  .state('tab.account', {
-    url: '/account',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
-      }
-    }
+  
+  // setup an abstract state for the tabs directive
+  .state('ble101-detail', {
+    url: "/ble101-detail/:deviceId",
+    templateUrl: 'view-detail/detail.html',
+    controller: 'BLEDetailCtrl as controller'
   });
 
+
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/ble101');
 
 });
