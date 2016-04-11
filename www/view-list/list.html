@@ -5,7 +5,18 @@
        on-refresh="controller.onRefresh()">
     </ion-refresher>
     <ion-list>
-      <ion-item class="item-icon-right" ng-repeat="device in controller.devices" type="item-text-wrap" href="#/ble101-detail/{{device.id}}">
+      <ion-item class="item-divider">
+          Arduino/Genuino 101 boards
+      </ion-item>
+      <ion-item class="item-icon-right" ng-repeat="device in controller.devices101" type="item-text-wrap" href="#/ble101-detail/{{device.id}}">
+        <h2>{{device.name}} - {{device.advertising.kCBAdvDataLocalName}}</h2>
+        <p>{{device.id}} &nbsp; RSSI: {{device.rssi}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+      <ion-item class="item-divider">
+          Other devices
+      </ion-item>
+      <ion-item class="item-icon-right" ng-disabled="true" ng-repeat="device in controller.devicesOther" type="item-text-wrap" href="#/ble101-detail/{{device.id}}">
         <h2>{{device.name}} - {{device.advertising.kCBAdvDataLocalName}}</h2>
         <p>{{device.id}} &nbsp; RSSI: {{device.rssi}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
