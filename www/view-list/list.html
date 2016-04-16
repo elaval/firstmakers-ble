@@ -16,7 +16,7 @@
       <ion-item class="item-divider">
           Other devices
       </ion-item>
-      <ion-item class="item-icon-right" ng-disabled="true" ng-repeat="device in controller.devicesOther" type="item-text-wrap" href="#/ble101-detail/{{device.id}}">
+      <ion-item class="item-icon-right" ng-disabled="true" ng-repeat="device in controller.devicesOther" type="item-text-wrap">
         <h2>{{device.name}} - {{device.advertising.kCBAdvDataLocalName}}</h2>
         <p>{{device.id}} &nbsp; RSSI: {{device.rssi}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>

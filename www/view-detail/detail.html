@@ -12,7 +12,7 @@
           Analog Ports
       </ion-item>
       <ion-item ng-repeat="characteristic in controller.analogPins">
-            {{characteristic.characteristic}}: {{characteristic.value}}
+            {{characteristic.pinName}}: {{characteristic.value}}
       </ion-item>
 
       <ion-item class="item-divider">
@@ -24,7 +24,7 @@
                   ng-model="controller.value[characteristic.characteristic]" 
                   ng-checked="controller.value[characteristic.characteristic]"
                   ng-change="controller.changeSwitch(controller.device.id, characteristic.service, characteristic.characteristic )">
-        {{ characteristic.characteristic }}
+        {{ characteristic.pinName }}
       </ion-toggle>
     </ion-list>
       

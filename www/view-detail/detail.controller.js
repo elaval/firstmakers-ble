@@ -30,8 +30,10 @@ angular.module('ble101')
             
             var pinType = d.characteristic.substring(0,2);
             if (pinType=="AA") {
+              d.pinName = "A"+d.characteristic.substring(3,4);
               myself.analogPins.push(d);
             } else if (pinType=="DD") {
+              d.pinName = "D"+d.characteristic.substring(2,4);
               myself.digitalPins.push(d);
             }
             
