@@ -1,5 +1,5 @@
 angular.module("ble101")
-.directive("fmTest",["$compile","_", "d3", function ($compile,_, d3) {
+.directive("fmTest",["$compile","_", "d3", "$interval", function ($compile,_, d3, $interval) {
  return {
   restrict: "A",
       require: '?ngModel', // get a hold of NgModelController
@@ -12,7 +12,9 @@ angular.module("ble101")
       link: function (scope, element, attrs, ngModel) {
         var pageWidth = 100;
         
-
+        var minValue = 1023  // will be adjusted to actual data
+        var maxValue = 0;    // will be adjusted to actual data
+        
         
         //draw the graph to show periods: previewelement is where to put it, perioddata is the, uh, data
         // Set the dimensions of the canvas / graph
@@ -80,14 +82,17 @@ angular.module("ble101")
           
           if (data) {
 
-
+            var currentMax = d3.max(data, function(d) {return d});
+            var currentMin = d3.min(data, function(d) {return d});
+            
+            maxValue = currentMax > maxValue ? currentMax : maxValue;
+            minValue = currentMin < minValue ? currentMin : minValue;
+            
             // Define scales domains
             x.domain(d3.extent(data, function(d,i) {
                 return i;
             }));
-            y.domain([0, d3.max(data, function(d) {
-                return d;
-            })]);
+            y.domain([minValue, maxValue]);
             
             svgContainer.select(".line")
             .attr("d", line(data));
@@ -107,7 +112,7 @@ angular.module("ble101")
         // Check for changes in data and re-render
         scope.$watch("data", function () {
           render(scope.data);
-        });      
+        }, true);      
   
       }
       

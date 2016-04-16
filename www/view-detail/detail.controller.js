@@ -1,19 +1,23 @@
 /* global ble */
 angular.module('ble101')
 
-.controller('BLEDetailCtrl', function($scope, $stateParams, BLE) {
+.controller('BLEDetailCtrl', function($scope, $stateParams, BLE, _, $timeout, $interval) {
   var myself = this;
   
   
   myself.value = {}; // Values for each digital pin
   myself.analogPins = [];
   myself.digitalPins = [];
+  myself.historicData = {};
+  
+  var historyPoints = 60;
 
   
   BLE.connect($stateParams.deviceId).then(
       function(peripheral) {
           myself.device = peripheral;
           myself.device_id = peripheral.id;
+
           
           /**
            * device.
@@ -37,42 +41,59 @@ angular.module('ble101')
               myself.digitalPins.push(d);
             }
             
+            myself.historicData[d.pinName] = [];
+            
+            _.each(_.range(historyPoints), function(i) {
+              myself.historicData[d.pinName][i]=null;
+            });
+            
             console.log(d.characteristic, d.service);
 
  
-              ble.read(myself.device_id, d.service, d.characteristic,
-                function(buffer) {
-                  // assuming heart rate measurement is Uint8 format, real code should check the flags
-                  // See the characteristic specs http://goo.gl/N7S5ZS
-                  var data = new Uint8Array(buffer);
-                  console.log("buffer",d.characteristic,data, data[1]);
+            ble.read(myself.device_id, d.service, d.characteristic,
+              function(buffer) {
+                // assuming heart rate measurement is Uint8 format, real code should check the flags
+                // See the characteristic specs http://goo.gl/N7S5ZS
+                var data = new Uint8Array(buffer);
+                console.log("buffer",d.characteristic,data, data[1]);
+                
+                $scope.$apply(function() {
+                  d.value = 256*data[0]+data[1];
                   
-                  $scope.$apply(function() {
-                    d.value = 256*data[0]+data[1];
-                    //d.value = data[0];
-                  })
-                },
-                function(err) {
-                  console.log(err);
-                }  
-              );      
-              
-                    
-              ble.startNotification(myself.device_id, d.service, d.characteristic,
-                function(buffer) {
-                  // assuming heart rate measurement is Uint8 format, real code should check the flags
-                  // See the characteristic specs http://goo.gl/N7S5ZS
-                  var data = new Uint8Array(buffer);
-                  //console.log("buffer",d.characteristic,data, data[1]);
-                  $scope.$apply(function() {
-                    d.value = 256*data[0]+data[1];
-                    //d.value = data[0];
-                  })
+                })
+              },
+              function(err) {
+                console.log(err);
+              }  
+            );      
+            
+                  
+            ble.startNotification(myself.device_id, d.service, d.characteristic,
+              function(buffer) {
+                // assuming heart rate measurement is Uint8 format, real code should check the flags
+                // See the characteristic specs http://goo.gl/N7S5ZS
+                var data = new Uint8Array(buffer);
+                //console.log("buffer",d.characteristic,data, data[1]);
+                $scope.$apply(function() {
+                  d.value = 256*data[0]+data[1];
+                  
+                  
+                  //console.log(d.characteristic, d.value, d.history)
+                })
 
-                },
-                function(err) {
-                  console.log(err);
-                })  
+              },
+              function(err) {
+                console.log(err);
+              })  
+                
+            $interval(function() {
+              myself.historicData[d.pinName].push(d.value);
+              // Keep 60 seconds of history
+              if (myself.historicData[d.pinName].length > 60) {
+                myself.historicData[d.pinName].splice(0,1);
+              }
+            }, 1000)
+            
           });
       }
   );

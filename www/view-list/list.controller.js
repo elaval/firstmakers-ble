@@ -1,7 +1,7 @@
 /* global ble */
 angular.module('ble101')
 
-.controller('BLECtrl', function($scope, BLE) {
+.controller('BLECtrl', ['$scope', 'BLE', '_','$interval', function($scope, BLE, _, $interval) {
   var myself = this;
 
   // keep a reference since devices will be added
@@ -9,7 +9,6 @@ angular.module('ble101')
   myself.devices101 = [];
   myself.devicesOther = [];
   
-
 
   var success = function () {
       if (myself.devices.length < 1) {
@@ -47,4 +46,4 @@ angular.module('ble101')
   // initial scan
   BLE.scan().then(success, failure);
 
-})
+}])

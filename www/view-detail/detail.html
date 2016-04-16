@@ -6,54 +6,112 @@
     {{controller.device.name}} - {{controller.device.advertising.kCBAdvDataLocalName}}
   </ion-nav-title>
   <ion-content>
+    
+    
+
+    
+    
+
     <ion-list>
       
       <ion-item class="item-divider">
           Analog Ports
       </ion-item>
-      <ion-item ng-repeat="characteristic in controller.analogPins">
-            {{characteristic.pinName}}: {{characteristic.value}}
-      </ion-item>
+      <ion-item>
+        <div ng-repeat="pin in controller.analogPins">
+          <div ng-if="$index%3==0" class="row">
+              <div class="col">
+                    {{controller.analogPins[$index].pinName}}: {{controller.analogPins[$index].value}}
+                    <div fm-test fm-data="controller.historicData[controller.analogPins[$index].pinName]"></div>
+              </div>          
+              <div class="col">
+                    {{controller.analogPins[$index+1].pinName}}: {{controller.analogPins[$index+1].value}}
+                    <div fm-test fm-data="controller.historicData[controller.analogPins[$index+1].pinName]"></div>
+              </div>          
+              <div class="col">
+                    {{controller.analogPins[$index+2].pinName}}: {{controller.analogPins[$index+2].value}}
+                    <div fm-test fm-data="controller.historicData[controller.analogPins[$index+2].pinName]"></div>
+              </div>
+          </div>
+        </div>      
+    </ion-item>
+
 
       <ion-item class="item-divider">
           Digital Ports
       </ion-item>
+      <ion-item>
+        <div ng-repeat="pin in controller.digitalPins">
+          <div ng-if="$index%3==0" class="row">
+              <div class="col col-33" ng-if="controller.digitalPins[$index+0]">
+                  {{ controller.digitalPins[$index+0].pinName }}
+                  <label class="toggle">
+                      <input type="checkbox"
+                              ng-model="controller.value[controller.digitalPins[$index+0].characteristic]" 
+                              ng-checked="controller.value[controller.digitalPins[$index+0].characteristic]"
+                              ng-change="controller.changeSwitch(controller.device.id, controller.digitalPins[$index+0].service, controller.digitalPins[$index+0].characteristic )">
+                      <div class="track">
+                          <div class="handle"></div>
+                      </div>
+                  </label>
+                <!--
+                  <ion-toggle 
+                              ng-model="controller.value[controller.digitalPins[$index].characteristic]" 
+                              ng-checked="controller.value[controller.digitalPins[$index].characteristic]"
+                              ng-change="controller.changeSwitch(controller.device.id, controller.digitalPins[$index].service, controller.digitalPins[$index].characteristic )">
+                    {{ controller.digitalPins[$index].pinName }}
+                  </ion-toggle>
+                  -->
+              </div>          
+              <div class="col col-33" ng-if="controller.digitalPins[$index+1]">
+                  {{ controller.digitalPins[$index+1].pinName }}
+                  <label class="toggle">
+                      <input type="checkbox"
+                              ng-model="controller.value[controller.digitalPins[$index+1].characteristic]" 
+                              ng-checked="controller.value[controller.digitalPins[$index+1].characteristic]"
+                              ng-change="controller.changeSwitch(controller.device.id, controller.digitalPins[$index+1].service, controller.digitalPins[$index+1].characteristic )">
+                      <div class="track">
+                          <div class="handle"></div>
+                      </div>
+                  </label>
+                <!--
+                  <ion-toggle 
+                              ng-model="controller.value[controller.digitalPins[$index+1].characteristic]" 
+                              ng-checked="controller.value[controller.digitalPins[$index+1].characteristic]"
+                              ng-change="controller.changeSwitch(controller.device.id, controller.digitalPins[$index+1].service, controller.digitalPins[$index+1].characteristic )">
+                    {{ controller.digitalPins[$index+1].pinName }}
+                  </ion-toggle>     
+                  -->         
+              </div>          
+              <div class="col col-33" ng-if="controller.digitalPins[$index+2]">
+                  {{ controller.digitalPins[$index+2].pinName }}
+                  <label class="toggle">
+                      <input type="checkbox"
+                              ng-model="controller.value[controller.digitalPins[$index+2].characteristic]" 
+                              ng-checked="controller.value[controller.digitalPins[$index+2].characteristic]"
+                              ng-change="controller.changeSwitch(controller.device.id, controller.digitalPins[$index+2].service, controller.digitalPins[$index+2].characteristic )">
+                      <div class="track">
+                          <div class="handle"></div>
+                      </div>
+                  </label>
+                <!--
+                   <ion-toggle 
+                              ng-if="controller.digitalPins[$index+2]"
+                              ng-model="controller.value[controller.digitalPins[$index+2].characteristic]" 
+                              ng-checked="controller.value[controller.digitalPins[$index+2].characteristic]"
+                              ng-change="controller.changeSwitch(controller.device.id, controller.digitalPins[$index+2].service, controller.digitalPins[$index+2].characteristic )">
+                    {{ controller.digitalPins[$index+2].pinName }}
+                  </ion-toggle>    
+                  -->          
+              </div>
+          </div>
+        </div>      
+     </ion-item>
       
-      <ion-toggle ng-repeat="characteristic in controller.digitalPins"
-                  ng-show="controller.isDigital(characteristic)"
-                  ng-model="controller.value[characteristic.characteristic]" 
-                  ng-checked="controller.value[characteristic.characteristic]"
-                  ng-change="controller.changeSwitch(controller.device.id, characteristic.service, characteristic.characteristic )">
-        {{ characteristic.pinName }}
-      </ion-toggle>
+
     </ion-list>
       
-      <!--
-    
-    <div class="list card" ng-repeat="characteristic in controller.device.characteristics" >
-      <div class="item item-divider">{{characteristic.characteristic}}</div>
-        <ion-list>
-          <ion-item>
-            Is Notifying: {{characteristic.isNotifying}}
-          </ion-item>          
-          <ion-item>
-            Properties: {{characteristic.properties}}
-          </ion-item>
-          <ion-item>
-            Service: {{characteristic.service}}
-          </ion-item>          
-          <ion-item>
-            Value: {{characteristic.value}}
-          </ion-item>
-        </ion-list>
-      <div class="radio">
-        <label>
-          <input type="checkbox" ng-model="controller.value[characteristic.characteristic]" ng-change="controller.changeSwitch(controller.device.id, characteristic.service, characteristic.characteristic )">
-          Switch
-        </label>
-      </div>
-      
-      -->
+
     </div>
         
     
