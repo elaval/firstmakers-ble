@@ -1,1 +1,14 @@
-/* Empty. Add your own CSS if you like */
+
+path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #CCC;
+    stroke-width: 2px;
+    shape-rendering: crispEdges;
+}
