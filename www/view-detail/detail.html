@@ -19,19 +19,33 @@
       </ion-item>
       <ion-item>
         <div ng-repeat="pin in controller.analogPins">
-          <div ng-if="$index%3==0" class="row">
+          <div ng-if="$index%2==0" class="row">
               <div class="col">
+                <div class="row">
+                  <div class="col">
                     {{controller.analogPins[$index].pinName}}: {{controller.analogPins[$index].value}}
+                  </div>                  
+                  <div class="col">
                     <div fm-test fm-data="controller.historicData[controller.analogPins[$index].pinName]"></div>
-              </div>          
+                  </div>
+                </div>
+              </div>  
               <div class="col">
+                <div class="row">
+                  <div class="col">
                     {{controller.analogPins[$index+1].pinName}}: {{controller.analogPins[$index+1].value}}
+                  </div>                  
+                  <div class="col">
                     <div fm-test fm-data="controller.historicData[controller.analogPins[$index+1].pinName]"></div>
+                  </div>
+                </div>
               </div>          
+              <!--        
               <div class="col">
                     {{controller.analogPins[$index+2].pinName}}: {{controller.analogPins[$index+2].value}}
                     <div fm-test fm-data="controller.historicData[controller.analogPins[$index+2].pinName]"></div>
               </div>
+              -->
           </div>
         </div>      
     </ion-item>

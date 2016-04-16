@@ -49,8 +49,13 @@ angular.module('ble101')
       )
   }
 
+  $scope.$on( "$ionicView.enter", function( scopes, states ) {
+    myself.onRefresh();
+  });
+
+
   // initial scan
-  myself.onRefresh();
+  //myself.onRefresh();
   //BLE.scan().then(success, failure);
 
 }])

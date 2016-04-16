@@ -10,7 +10,7 @@ angular.module("ble101")
       },
       
       link: function (scope, element, attrs, ngModel) {
-        var pageWidth = 100;
+        var pageWidth = 50;
         
         var minValue = 1023  // will be adjusted to actual data
         var maxValue = 0;    // will be adjusted to actual data
@@ -75,6 +75,14 @@ angular.module("ble101")
         var yAxis = d3.svg.axis().scale(y)
             .orient("left").ticks(10);
             
+        var resizeSvg = function() {
+          width = element.width()-margin.left-margin.right;
+          height = width*heightWidthRatio//-margin.top-margin.bottom;
+          svgMainContainer.attr("width",element.width())
+          svgMainContainer.attr("height",height+margin.top+margin.bottom)
+        }
+         
+            
         /*
         * render
         */
@@ -92,7 +100,13 @@ angular.module("ble101")
             x.domain(d3.extent(data, function(d,i) {
                 return i;
             }));
-            y.domain([minValue, maxValue]);
+            
+            if (minValue < maxValue) {
+              y.domain([minValue, maxValue]);
+            } else {
+              y.domain([0, 0]);
+            }
+            
             
             svgContainer.select(".line")
             .attr("d", line(data));
@@ -109,30 +123,29 @@ angular.module("ble101")
         }
 
 
+
         // Check for changes in data and re-render
         scope.$watch("data", function () {
           render(scope.data);
-        }, true);      
+        }, true);   
+        
+        // Aux function for checking changes in screen dimension
+        scope.getElementDimensions = function () {
+          return { 'h': element.height(), 'w': element.width() };
+        };
+
+        // Check for chaneges in screen dimension, resize SVG and re-render
+        scope.$watch(scope.getElementDimensions, function (newValue, oldValue) {
+          resizeSvg();
+          render(scope.data);
+        }, true);
+   
   
       }
       
       
     };
   }]);
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
 
 
 
