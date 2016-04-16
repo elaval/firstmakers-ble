@@ -8,20 +8,26 @@
       <ion-item class="item-divider">
           Arduino/Genuino 101 boards
       </ion-item>
+      <ion-item class="item-icon-right" ng-show="!controller.devices101.length && !controller.scanning">
+        <h2>No 101 devices found</h2>
+      </ion-item>
       <ion-item class="item-icon-right" ng-repeat="device in controller.devices101" type="item-text-wrap" href="#/ble101-detail/{{device.id}}">
         <h2>{{device.name}} - {{device.advertising.kCBAdvDataLocalName}}</h2>
         <p>{{device.id}} &nbsp; RSSI: {{device.rssi}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
-      <ion-item class="item-divider">
+      <ion-item class="item-divider" ng-show="controller.devicesOther.length">
           Other devices
       </ion-item>
       <ion-item class="item-icon-right" ng-disabled="true" ng-repeat="device in controller.devicesOther" type="item-text-wrap">
-        <h2>{{device.name}} - {{device.advertising.kCBAdvDataLocalName}}</h2>
-        <p>{{device.id}} &nbsp; RSSI: {{device.rssi}}</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
+        <h2 class="text-muted"><span ng-hide="device.advertising.kCBAdvDataLocalName">{{device.name}}</span><span ng-show="device.advertising.kCBAdvDataLocalName">{{device.advertising.kCBAdvDataLocalName}}</span></h2>
       </ion-item>
     </ion-list>
+    <button class="button button-block button-primary" ng-disabled="controller.scanning" ng-click="controller.onRefresh()">
+      <span ng-hide="controller.scanning">Scan nearby devices</span>
+      <span ng-show="controller.scanning">Scanning devices</span>
+        
+    </button>
   </ion-content>
   
 

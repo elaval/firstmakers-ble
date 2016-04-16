@@ -8,6 +8,7 @@ angular.module('ble101')
   myself.devices = BLE.devices;
   myself.devices101 = [];
   myself.devicesOther = [];
+  myself.scanning = false;
   
 
   var success = function () {
@@ -34,16 +35,22 @@ angular.module('ble101')
 
   // pull to refresh
   myself.onRefresh = function() {
+      myself.scanning = true;
+      myself.devices101 = [];
+      myself.devicesOther = [];
+      
       BLE.scan().then(
           success, failure
       ).finally(
           function() {
+              myself.scanning = false;  
               $scope.$broadcast('scroll.refreshComplete');
           }
       )
   }
 
   // initial scan
-  BLE.scan().then(success, failure);
+  myself.onRefresh();
+  //BLE.scan().then(success, failure);
 
 }])
