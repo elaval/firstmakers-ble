@@ -32,10 +32,10 @@ angular.module('ble101')
     _.each(peripheral.characteristics, function(d) {
       
       var pinType = d.characteristic.substring(0,2);
-      if (pinType=="AA") {
+      if (pinType.toUpperCase()=="AA") {
         d.pinName = "A"+d.characteristic.substring(3,4);
         myself.analogPins.push(d);
-      } else if (pinType=="DD") {
+      } else if (pinType.toUpperCase()=="DD") {
         d.pinName = "D"+d.characteristic.substring(2,4);
         myself.digitalPins.push(d);
       }
@@ -49,7 +49,7 @@ angular.module('ble101')
       console.log(d.characteristic, d.service);
 
 
-      ble.read(myself.device_id, d.service, d.characteristic,
+      $cordovaBLE.read(myself.device_id, d.service, d.characteristic,
         function(buffer) {
           // assuming heart rate measurement is Uint8 format, real code should check the flags
           // See the characteristic specs http://goo.gl/N7S5ZS
@@ -67,7 +67,7 @@ angular.module('ble101')
       );      
       
             
-      ble.startNotification(myself.device_id, d.service, d.characteristic,
+      $cordovaBLE.startNotification(myself.device_id, d.service, d.characteristic,
         function(buffer) {
           // assuming heart rate measurement is Uint8 format, real code should check the flags
           // See the characteristic specs http://goo.gl/N7S5ZS
@@ -113,7 +113,7 @@ angular.module('ble101')
 
     data[0] = myself.value[characteristic_uuid] ? 1 : 0;
 
-    BLE.write(device_id, service_uuid, characteristic_uuid, data.buffer)
+    $cordovaBLE.write(device_id, service_uuid, characteristic_uuid, data.buffer)
     .then(function() {
       console.log("Written ", myself.value[characteristic_uuid]);
     })

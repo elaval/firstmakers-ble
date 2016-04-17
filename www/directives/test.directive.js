@@ -38,7 +38,7 @@ angular.module("ble101")
                 return x(i);
             })
             .y(function(d) {
-                return y(d);
+                return d==null ? 9999 : y(d);
             });  
             
         var svgMainContainer = d3.select(element[0])
@@ -57,16 +57,6 @@ angular.module("ble101")
         svgContainer.append("path")
             .attr("class", "line");
 
-        /* 
-        svgContainer.append("g")
-          .attr("class", "x axis")
-          .attr("transform", "translate(0," + height + ")");
-
-
-        svgContainer.append("g")
-            .attr("class", "y axis");
-        */
-
             
         // set up axes  
         var xAxis = d3.svg.axis().scale(x)
@@ -76,10 +66,8 @@ angular.module("ble101")
             .orient("left").ticks(10);
             
         var resizeSvg = function() {
-          width = element.width()-margin.left-margin.right;
-          height = width*heightWidthRatio//-margin.top-margin.bottom;
-          svgMainContainer.attr("width",element.width())
-          svgMainContainer.attr("height",height+margin.top+margin.bottom)
+          width = element[0].offsetWidth-margin.left-margin.right;
+          svgMainContainer.attr("width",element[0].offsetWidth)
         }
          
             
@@ -101,11 +89,7 @@ angular.module("ble101")
                 return i;
             }));
             
-            if (minValue < maxValue) {
-              y.domain([minValue, maxValue]);
-            } else {
-              y.domain([0, 0]);
-            }
+            y.domain([minValue, maxValue]);
             
             
             svgContainer.select(".line")
@@ -131,7 +115,7 @@ angular.module("ble101")
         
         // Aux function for checking changes in screen dimension
         scope.getElementDimensions = function () {
-          return { 'h': element.height(), 'w': element.width() };
+          return { 'h': element[0].offsetHeight, 'w': element[0].offsetWidth };
         };
 
         // Check for chaneges in screen dimension, resize SVG and re-render
