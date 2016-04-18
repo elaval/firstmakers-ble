@@ -31,11 +31,11 @@ angular.module('ble101')
 
     _.each(peripheral.characteristics, function(d) {
       
-      var pinType = d.characteristic.substring(0,2);
-      if (pinType.toUpperCase()=="AA") {
+      var pinType = d.characteristic.substring(0,2).toUpperCase();
+      if (pinType=="AA") {
         d.pinName = "A"+d.characteristic.substring(3,4);
         myself.analogPins.push(d);
-      } else if (pinType.toUpperCase()=="DD") {
+      } else if (pinType=="DD") {
         d.pinName = "D"+d.characteristic.substring(2,4);
         myself.digitalPins.push(d);
       }
@@ -56,10 +56,17 @@ angular.module('ble101')
           var data = new Uint8Array(buffer);
           console.log("buffer",d.characteristic,data, data[1]);
           
-          $scope.$apply(function() {
-            d.value = 256*data[0]+data[1];
-            
-          })
+          if (pinType=="DD") {
+            $scope.$apply(function() {
+              //d.value = data;
+              console.log(d.characteristic,d.value, d);
+            })
+          } else if (pinType=="AA") {
+            $scope.$apply(function() {
+              d.value = 256*data[0]+data[1];
+              console.log(d.characteristic,d.value, d);
+            })            
+          }
         },
         function(err) {
           console.log(err);
@@ -69,21 +76,25 @@ angular.module('ble101')
             
       $cordovaBLE.startNotification(myself.device_id, d.service, d.characteristic,
         function(buffer) {
-          // assuming heart rate measurement is Uint8 format, real code should check the flags
-          // See the characteristic specs http://goo.gl/N7S5ZS
+          
           var data = new Uint8Array(buffer);
-          //console.log("buffer",d.characteristic,data, data[1]);
-          $scope.$apply(function() {
-            d.value = 256*data[0]+data[1];
-            
-            
-            //console.log(d.characteristic, d.value, d.history)
-          })
+          if (pinType=="DD") {
+            $scope.$apply(function() {
+              //d.value = data;
+              myself.value[d.characteristic] = data[0]==1;
+              console.log(d.characteristic,data,d.value, d, myself.value);
+            })
+          } else if (pinType=="AA") {
+            $scope.$apply(function() {
+              d.value = 256*data[0]+data[1];
+            })            
+          }
 
         },
         function(err) {
           console.log(err);
-        })  
+        }
+      )  
           
       $interval(function() {
         myself.historicData[d.pinName].push(d.value);
